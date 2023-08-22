@@ -1,10 +1,11 @@
-function Drawer(props) {
+function Drawer({ onClouseBasket, items = [] }) {
 	return (
 		<div className="overlay">
 			<div className="drawer">
 				<h2>
 					Корзина
-					<img onClick={props.onClouseBasket}
+					<img
+						onClick={onClouseBasket}
 						className="btnClouse"
 						src="img/btn/btnClouseActive.svg"
 						alt="btnClouse"
@@ -12,40 +13,25 @@ function Drawer(props) {
 				</h2>
 
 				<div className="cartItems">
-					<div className="cartItem">
-						<img
-							width={70}
-							height={70}
-							src="img/sneakers/sneakers1.jpg"
-							alt="sneakers1"
-						/>
-						<div>
-							<p>Мужские Кроссовки Nike Blazer Mid Suede</p>
-							<b>12 999 руб.</b>
+					{items.map((obj) => (
+						<div className="cartItem">
+							<img
+								width={70}
+								height={70}
+								src={obj.imageUrl}
+								alt="sneakers2"
+							/>
+							<div>
+								<p>{obj.name}</p>
+								<b>{obj.price} руб.</b>
+							</div>
+							<img
+								className="btnClouse"
+								src="img/btn/btnClouseActive.svg"
+								alt="btnClouse"
+							/>
 						</div>
-						<img
-							className="btnClouse"
-							src="img/btn/btnClouseActive.svg"
-							alt="btnClouse"
-						/>
-					</div>
-					<div className="cartItem">
-						<img
-							width={70}
-							height={70}
-							src="img/sneakers/sneakers2.jpg"
-							alt="sneakers2"
-						/>
-						<div>
-							<p>Мужские Кроссовки Nike Air Max 270</p>
-							<b>8 499 руб.</b>
-						</div>
-						<img
-							className="btnClouse"
-							src="img/btn/btnClouseActive.svg"
-							alt="btnClouse"
-						/>
-					</div>
+					))}
 				</div>
 
 				<ul className="cartFooter">

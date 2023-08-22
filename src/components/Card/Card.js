@@ -1,11 +1,12 @@
 import styles from './Card.module.scss'
 import React from 'react'
 
-function Card(props) {
+function Card({name, price, imageUrl, onPlus, onFavorite}) {
 	const [isAdded, setIsAdded] = React.useState(false)
 	const [isLike, setIsLike] = React.useState(false)
 
 	const onClickPlus = () => {
+    onPlus({name, price, imageUrl})
 		setIsAdded(!isAdded)
 	}
 
@@ -22,12 +23,12 @@ function Card(props) {
 					alt="Unlok"
 				/>
 			</div>
-			<img width={133} height={112} src={props.imageUrl} alt="sneakers1" />
-			<h5>{props.name}</h5>
+			<img width={133} height={112} src={imageUrl} alt="sneakers1" />
+			<h5>{name}</h5>
 			<div className={styles.cardFooter}>
 				<div className={styles.cardFooterPrise}>
 					<span>Цена:</span>
-					<b>{props.price} руб</b>
+					<b>{price} руб</b>
 				</div>
 				<img
 					className={styles.plus}
