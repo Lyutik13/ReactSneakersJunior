@@ -8,6 +8,7 @@ import Drawer from './components/Drawer'
 function App() {
 	const [items, setItems] = React.useState([])
 	const [cartItems, setCartItems] = React.useState([])
+	const [searchValue, setSearchValue] = React.useState('')
 	const [cartOpened, setCartOpened] = React.useState(false)
 
 	React.useEffect(() => {
@@ -21,10 +22,15 @@ function App() {
 	}, [])
 
 	const onAddToCart = (obj) => {
-		setCartItems(prev => [...prev, obj])
+		setCartItems((prev) => [...prev, obj])
 	}
 
 	console.log(cartItems)
+
+	const onChangeSearchInput = (event) => {
+		console.log(event.target.value)
+		// setSearchValue()
+	}
 
 	return (
 		<div className="wrapper clear">
@@ -39,12 +45,13 @@ function App() {
 					<h1>Все кроссовки</h1>
 					<div className="search-block">
 						<img width={15} height={15} src="img/search.svg" alt="search" />
-						<input placeholder="Поиск..." />
+						<input onChange={onChangeSearchInput} placeholder="Поиск..." />
 					</div>
 				</div>
 				<div className="cardWrapper">
-					{items.map((item) => (
+					{items.map((item, index) => (
 						<Card
+							key={index}
 							name={item.name}
 							price={item.price}
 							imageUrl={item.imageUrl}
@@ -60,4 +67,4 @@ function App() {
 
 export default App
 
-//  1 19
+//  0 28 #5
