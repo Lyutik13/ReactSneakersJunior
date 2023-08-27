@@ -83,7 +83,7 @@ code {
 }
 
 .basket {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .content {
@@ -98,7 +98,7 @@ h5 {
 
 .cardWrapper {
 	display: flex;
-  flex-wrap: wrap;
+	flex-wrap: wrap;
 	justify-content: center;
 	gap: 30px;
 	// flex-wrap: wrap;
@@ -160,29 +160,44 @@ h5 {
 // }
 
 .search {
+	max-width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	margin-bottom: 40px;
+	h1 {
+		max-width: 400px;
+		height: 100%;
+	}
 }
 
 .search-block {
+	position: relative;
 	align-items: center;
 	display: flex;
 	border-radius: 10px;
 	border: 1px solid #f3f3f3;
-	width: 250px;
+	min-width: 250px;
 	height: 45px;
 	input {
-		width: 200px;
+		width: 180px;
 		border: 0;
 		padding: 12px;
 		font-size: 16px;
 		color: #c4c4c4;
 	}
-	img {
-		margin-left: 15px;
-	}
+}
+
+.imgSearch {
+	margin-left: 15px;
+}
+
+.btnClouseSearch {
+	position: absolute;
+	right: 0;
+	width: 20px;
+	height: 20px;
+	margin-right: 15px;
 }
 
 .overlay {
@@ -247,6 +262,22 @@ h5 {
 	}
 }
 
+.cartEmpty {
+  justify-content: center;
+  align-items: center;
+	text-align: center;
+	flex: 1;
+	margin: 50% 0 0 0;
+	h2 {
+		margin: 20px 0 0 0;
+		align-items: center;
+		justify-content: center;
+	}
+	p {
+		margin: 10px 0 40px 0;
+	}
+}
+
 .btnClouse {
 	opacity: 0.5;
 	transition: opacity 0.2s ease-in-out;
@@ -291,7 +322,7 @@ h5 {
 	transition: 0.2s ease-in-out;
 
 	&:hover {
-		background: lighten($color: #9dd458, $amount: 5%);
+		background-color: lighten($color: #9dd458, $amount: 5%);
 		img {
 			transform: translateX(10px);
 		}
@@ -306,5 +337,18 @@ h5 {
 		position: absolute;
 		right: 35px;
 		top: 20px;
+	}
+}
+
+.greenBtnLeftImg {
+  width: 245px;
+	img {
+		left: 25px;
+	}
+
+	&:hover {
+		img {
+			transform: translateX(-10px);
+		}
 	}
 }
