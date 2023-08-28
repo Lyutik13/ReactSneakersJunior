@@ -9,6 +9,7 @@ import Drawer from './components/Drawer'
 function App() {
   const [items, setItems] = React.useState([])
   const [cartItems, setCartItems] = React.useState([])
+  const [cartLike, setcartLike] = React.useState([])
   const [searchValue, setSearchValue] = React.useState('')
   const [cartOpened, setCartOpened] = React.useState(false)
 
@@ -40,6 +41,11 @@ function App() {
     setCartItems((prev) => prev.filter(item => item.id !== id))
   }
 
+  const onLikeToCart = (obj) => {
+    axios.post('https://64ecd4d3f9b2b70f2bfb00e2.mockapi.io/like', obj)
+    setcartLike((prev) => [...prev, obj])
+  }
+
   return (
     <div className="wrapper clear">
       {/* {cartOpened ? <Drawer onClouseBasket={() => setCartOpened(false)} /> : null} */}
@@ -66,7 +72,7 @@ function App() {
               name={item.name}
               price={item.price}
               imageUrl={item.imageUrl}
-              // onFavorite={() => console.log('love')}
+              onFavorite={(obj) => onLikeToCart(obj)}
               onPlus={onAddToCart}
             />
           ))}
@@ -78,4 +84,4 @@ function App() {
 
 export default App
 
-// #5 1 14 30
+// #5 1 41
