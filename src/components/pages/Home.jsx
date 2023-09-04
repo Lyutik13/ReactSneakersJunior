@@ -1,6 +1,6 @@
 import Card from "../Card/Card"
 
-function Home({items, searchValue, setSearchValue, onLikeToCart, onAddToCart,}) {
+function Home({items, cartItems, searchValue, setSearchValue, onLikeToCart, onAddToCart,}) {
   return(
     <div className="content clear">
     <div className="search">
@@ -19,6 +19,7 @@ function Home({items, searchValue, setSearchValue, onLikeToCart, onAddToCart,}) 
             key={index}
             onFavorite={(obj) => onLikeToCart(obj)}
             onPlus={onAddToCart}
+            added={cartItems.some(obj => Number(obj.id) === Number(item.id))}
             {...item}
           />
         ))}

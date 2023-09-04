@@ -25,26 +25,30 @@ function App() {
 		//     setItems(json)
 		//   })
 
-		axios
-			.get('https://64e20681ab00373588189d07.mockapi.io/items')
-			.then((res) => {
-				setItems(res.data)
-			})
-		axios
-			.get('https://64e20681ab00373588189d07.mockapi.io/cart')
-			.then((res) => {
-				setCartItems(res.data)
-			})
-		axios
-			.get('https://64ecd4d3f9b2b70f2bfb00e2.mockapi.io/like')
-			.then((res) => {
-				setcartLike(res.data)
-			})
+      async function fetcData() {
+        const cartResponse = await axios.get('https://64e20681ab00373588189d07.mockapi.io/cart')
+        const likeResponse = await axios.get('https://64ecd4d3f9b2b70f2bfb00e2.mockapi.io/like')
+        const itemsResponse = await axios.get('https://64e20681ab00373588189d07.mockapi.io/items')
+
+        setCartItems(cartResponse.data)
+        setcartLike(likeResponse.data)
+        setItems(itemsResponse.data)
+      }
+
+      fetcData()
 	}, [])
 
 	const onAddToCart = (obj) => {
-		axios.post('https://64e20681ab00373588189d07.mockapi.io/cart', obj)
-		setCartItems((prev) => [...prev, obj])
+		try {
+      console.log(obj)
+			if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
+        axios.delete(`https://64e20681ab00373588189d07.mockapi.io/cart/${obj.id}`)
+				setCartItems((prev) => prev.filter((item) => Number(item.id) !== Number(obj.id)))
+			} else {
+				axios.post('https://64e20681ab00373588189d07.mockapi.io/cart', obj)
+				setCartItems((prev) => [...prev, obj])
+			}
+		} catch (error) {}
 	}
 
 	const onRemuveItem = (id) => {
@@ -92,6 +96,7 @@ function App() {
 					element={
 						<Home
 							items={items}
+              cartItems={cartItems}
 							searchValue={searchValue}
 							setSearchValue={setSearchValue}
 							onLikeToCart={onLikeToCart}
@@ -115,4 +120,4 @@ function App() {
 
 export default App
 
-// #5 2 19 20 работа с передачей методов
+// #6 1 08 skeleton
