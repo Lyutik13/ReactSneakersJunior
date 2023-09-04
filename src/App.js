@@ -1,87 +1,118 @@
 import React from 'react'
+import { Route, Routes } from 'react-router-dom'
 import axios from 'axios'
-import Card from './components/Card/Card'
+
 import Header from './components/Header'
 import Drawer from './components/Drawer'
+import Home from './components/pages/Home'
+import Favorites from './components/pages/Favorites'
 
 // import arr from './bd'
 
 function App() {
-  const [items, setItems] = React.useState([])
-  const [cartItems, setCartItems] = React.useState([])
-  const [cartLike, setcartLike] = React.useState([])
-  const [searchValue, setSearchValue] = React.useState('')
-  const [cartOpened, setCartOpened] = React.useState(false)
+	const [items, setItems] = React.useState([])
+	const [cartItems, setCartItems] = React.useState([])
+	const [cartLike, setcartLike] = React.useState([])
+	const [searchValue, setSearchValue] = React.useState('')
+	const [cartOpened, setCartOpened] = React.useState(false)
 
-  React.useEffect(() => {
-    // fetch('https://64e20681ab00373588189d07.mockapi.io/items')
-    //   .then((res) => {
-    //     return res.json()
-    //   })
-    //   .then((json) => {
-    //     setItems(json)
-    //   })
+	React.useEffect(() => {
+		// fetch('https://64e20681ab00373588189d07.mockapi.io/items')
+		//   .then((res) => {
+		//     return res.json()
+		//   })
+		//   .then((json) => {
+		//     setItems(json)
+		//   })
 
-      axios.get('https://64e20681ab00373588189d07.mockapi.io/items').then(res => {
-        setItems(res.data)
-      })
-      axios.get('https://64e20681ab00373588189d07.mockapi.io/cart').then(res => {
-        setCartItems(res.data)
-      })
-  }, [])
+		axios
+			.get('https://64e20681ab00373588189d07.mockapi.io/items')
+			.then((res) => {
+				setItems(res.data)
+			})
+		axios
+			.get('https://64e20681ab00373588189d07.mockapi.io/cart')
+			.then((res) => {
+				setCartItems(res.data)
+			})
+		axios
+			.get('https://64ecd4d3f9b2b70f2bfb00e2.mockapi.io/like')
+			.then((res) => {
+				setcartLike(res.data)
+			})
+	}, [])
 
-  const onAddToCart = (obj) => {
-    axios.post('https://64e20681ab00373588189d07.mockapi.io/cart', obj)
-    setCartItems((prev) => [...prev, obj])
-  }
+	const onAddToCart = (obj) => {
+		axios.post('https://64e20681ab00373588189d07.mockapi.io/cart', obj)
+		setCartItems((prev) => [...prev, obj])
+	}
 
-  const onRemuveItem = (id) => {
-    axios.delete(`https://64e20681ab00373588189d07.mockapi.io/cart/${id}`)
-    console.log(id)
-    setCartItems((prev) => prev.filter(item => item.id !== id))
-  }
+	const onRemuveItem = (id) => {
+		axios.delete(`https://64e20681ab00373588189d07.mockapi.io/cart/${id}`)
+		console.log(id)
+		setCartItems((prev) => prev.filter((item) => item.id !== id))
+	}
 
-  const onLikeToCart = (obj) => {
-    axios.post('https://64ecd4d3f9b2b70f2bfb00e2.mockapi.io/like', obj)
-    setcartLike((prev) => [...prev, obj])
-  }
+	const onLikeToCart = async (obj) => {
+		try {
+			if (cartLike.find((favObj) => favObj.id === obj.id)) {
+				axios.delete(
+					`https://64ecd4d3f9b2b70f2bfb00e2.mockapi.io/like/${obj.id}`
+				)
+				setcartLike((prev) => prev.filter((item) => item.id !== obj.id))
+			} else {
+				const { data } = await axios.post(
+					'https://64ecd4d3f9b2b70f2bfb00e2.mockapi.io/like',
+					obj
+				)
+				setcartLike((prev) => [...prev, data])
+			}
+		} catch (error) {
+			alert('Не удалось добавить в фавориты')
+		}
+	}
 
-  return (
-    <div className="wrapper clear">
-      {/* {cartOpened ? <Drawer onClouseBasket={() => setCartOpened(false)} /> : null} */}
-      {cartOpened && (
-        <Drawer items={cartItems} onClouseBasket={() => setCartOpened(false)} onRemuve ={onRemuveItem}/>
-      )}
-      <Header onClickCard={() => setCartOpened(true)} />
+	return (
+		<div className="wrapper clear">
+			{/* {cartOpened ? <Drawer onClouseBasket={() => setCartOpened(false)} /> : null} */}
+			{cartOpened && (
+				<Drawer
+					items={cartItems}
+					onClouseBasket={() => setCartOpened(false)}
+					onRemuve={onRemuveItem}
+				/>
+			)}
 
-      <div className="content clear">
-        <div className="search">
-          <h1>{searchValue ? `Поиск по запросу: "${searchValue}"` : 'Все кроссовки'}</h1>
-          <div className="search-block">
-            <img className='imgSearch' width={15} height={15} src="img/search.svg" alt="search" />
-            <input onChange={(event) => setSearchValue(event.target.value)} value={searchValue} placeholder="Поиск..." />
-            {searchValue && <img onClick={() => setSearchValue('')} className="btnClouseSearch" src="img/btn/btnClouseActive.svg" alt="Clear" />}
-          </div>
-        </div>
-        <div className="cardWrapper">
-          {items
-          .filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()))
-          .map((item, index) => (
-            <Card
-              key={index}
-              name={item.name}
-              price={item.price}
-              imageUrl={item.imageUrl}
-              onFavorite={(obj) => onLikeToCart(obj)}
-              onPlus={onAddToCart}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  )
+			<Header onClickCard={() => setCartOpened(true)} />
+
+			<Routes>
+				{/* <Route path="/favorites" element={<div>This is Test</div>} exact /> */}
+				<Route
+					path="/"
+					element={
+						<Home
+							items={items}
+							searchValue={searchValue}
+							setSearchValue={setSearchValue}
+							onLikeToCart={onLikeToCart}
+							onAddToCart={onAddToCart}
+						/>
+					}
+					exact
+				/>
+			</Routes>
+
+			<Routes>
+				<Route
+					path="/favorites"
+					element={<Favorites items={cartLike} onLikeToCart={onLikeToCart} />}
+					exact
+				/>
+			</Routes>
+		</div>
+	)
 }
 
 export default App
 
-// #5 1 41
+// #5 2 19 20 работа с передачей методов
