@@ -1,5 +1,9 @@
-import styles from './Card.module.scss'
 import React from 'react'
+import ContentLoader from 'react-content-loader'
+
+import AppContext from '../../context'
+
+import styles from './Card.module.scss'
 
 function Card({
 	id,
@@ -9,14 +13,15 @@ function Card({
 	onPlus,
 	onFavorite,
 	isFavorites = false,
-	added = false,
+	loaging = false,
 }) {
-	const [isAdded, setIsAdded] = React.useState(added)
+  const { isItemAdded } = React.useContext(AppContext)
 	const [isLike, setIsLike] = React.useState(isFavorites)
+
+  console.log(name, )
 
 	const onClickPlus = () => {
 		onPlus({ id, name, price, imageUrl })
-		setIsAdded(!isAdded)
 	}
 
 	const onClickLike = () => {
@@ -26,27 +31,47 @@ function Card({
 
 	return (
 		<div className={styles.card}>
-			<div className={styles.favorite}>
-				<img
-					onClick={onClickLike}
-					src={isLike ? 'img/btn/heardLike.svg' : 'img/btn/heardUnlok.svg'}
-					alt="Unlok"
-				/>
-			</div>
-			<img width={133} height={112} src={imageUrl} alt="sneakers1" />
-			<h5>{name}</h5>
-			<div className={styles.cardFooter}>
-				<div className={styles.cardFooterPrise}>
-					<span>Цена:</span>
-					<b>{price} руб</b>
-				</div>
-				<img
-					className={styles.plus}
-					onClick={onClickPlus}
-					src={isAdded ? 'img/btn/btnCheked.svg' : 'img/btn/btnPlus.svg'}
-					alt="plus"
-				/>
-			</div>
+			{loaging ? (
+				<ContentLoader
+					speed={2}
+					width={150}
+					height={206}
+					viewBox="0 0 150 185"
+					backgroundColor="#f3f3f3"
+					foregroundColor="#ecebeb"
+					// {...props}
+				>
+					<rect x="0" y="0" rx="10" ry="10" width="150" height="90" />
+					<rect x="0" y="105" rx="5" ry="5" width="150" height="15" />
+					<rect x="0" y="125" rx="5" ry="5" width="93" height="15" />
+					<rect x="0" y="158" rx="8" ry="8" width="80" height="24" />
+					<rect x="115" y="153" rx="10" ry="10" width="32" height="32" />
+				</ContentLoader>
+			) : (
+				<>
+					<div className={styles.favorite}>
+						<img
+							onClick={onClickLike}
+							src={isLike ? 'img/btn/heardLike.svg' : 'img/btn/heardUnlok.svg'}
+							alt="Unlok"
+						/>
+					</div>
+					<img width={133} height={112} src={imageUrl} alt="sneakers1" />
+					<h5>{name}</h5>
+					<div className={styles.cardFooter}>
+						<div className={styles.cardFooterPrise}>
+							<span>Цена:</span>
+							<b>{price} руб</b>
+						</div>
+						<img
+							className={styles.plus}
+							onClick={onClickPlus}
+							src={isItemAdded(id) ? 'img/btn/btnCheked.svg' : 'img/btn/btnPlus.svg'}
+							alt="plus"
+						/>
+					</div>
+				</>
+			)}
 		</div>
 	)
 }

@@ -83,7 +83,7 @@ code {
 }
 
 .like {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .basket {
@@ -231,6 +231,13 @@ h5 {
 	}
 }
 
+.cartWrapper {
+  max-height: 93%;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
 .cartItems {
 	flex: 1;
 	overflow: auto;
@@ -267,8 +274,8 @@ h5 {
 }
 
 .cartEmpty {
-  justify-content: center;
-  align-items: center;
+	justify-content: center;
+	align-items: center;
 	text-align: center;
 	flex: 1;
 	margin: 50% 0 0 0;
@@ -324,6 +331,10 @@ h5 {
 	font-weight: 600;
 	cursor: pointer;
 	transition: 0.2s ease-in-out;
+  &:disabled {
+    background-color: #bebebe !important;
+    cursor: default;
+  }
 
 	&:hover {
 		background-color: lighten($color: #9dd458, $amount: 5%);
@@ -345,7 +356,7 @@ h5 {
 }
 
 .greenBtnLeftImg {
-  width: 245px;
+	width: 245px;
 	img {
 		left: 25px;
 	}

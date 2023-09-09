@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import axios from 'axios'
 
+import AppContext from './context'
 import Header from './components/Header'
 import Drawer from './components/Drawer'
 import Home from './components/pages/Home'
@@ -15,6 +16,9 @@ function App() {
 	const [cartLike, setcartLike] = React.useState([])
 	const [searchValue, setSearchValue] = React.useState('')
 	const [cartOpened, setCartOpened] = React.useState(false)
+	const [isLoading, setIsLoading] = React.useState(true)
+
+	console.log(cartLike)
 
 	React.useEffect(() => {
 		// fetch('https://64e20681ab00373588189d07.mockapi.io/items')
@@ -25,25 +29,37 @@ function App() {
 		//     setItems(json)
 		//   })
 
-      async function fetcData() {
-        const cartResponse = await axios.get('https://64e20681ab00373588189d07.mockapi.io/cart')
-        const likeResponse = await axios.get('https://64ecd4d3f9b2b70f2bfb00e2.mockapi.io/like')
-        const itemsResponse = await axios.get('https://64e20681ab00373588189d07.mockapi.io/items')
+		async function fetcData() {
+			setIsLoading(true)
+			const cartResponse = await axios.get(
+				'https://64e20681ab00373588189d07.mockapi.io/cart'
+			)
+			const likeResponse = await axios.get(
+				'https://64ecd4d3f9b2b70f2bfb00e2.mockapi.io/like'
+			)
+			const itemsResponse = await axios.get(
+				'https://64e20681ab00373588189d07.mockapi.io/items'
+			)
 
-        setCartItems(cartResponse.data)
-        setcartLike(likeResponse.data)
-        setItems(itemsResponse.data)
-      }
+			setIsLoading(false)
 
-      fetcData()
+			setCartItems(cartResponse.data)
+			setcartLike(likeResponse.data)
+			setItems(itemsResponse.data)
+		}
+
+		fetcData()
 	}, [])
 
 	const onAddToCart = (obj) => {
 		try {
-      console.log(obj)
 			if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
-        axios.delete(`https://64e20681ab00373588189d07.mockapi.io/cart/${obj.id}`)
-				setCartItems((prev) => prev.filter((item) => Number(item.id) !== Number(obj.id)))
+				axios.delete(
+					`https://64e20681ab00373588189d07.mockapi.io/cart/${obj.id}`
+				)
+				setCartItems((prev) =>
+					prev.filter((item) => Number(item.id) !== Number(obj.id))
+				)
 			} else {
 				axios.post('https://64e20681ab00373588189d07.mockapi.io/cart', obj)
 				setCartItems((prev) => [...prev, obj])
@@ -53,17 +69,18 @@ function App() {
 
 	const onRemuveItem = (id) => {
 		axios.delete(`https://64e20681ab00373588189d07.mockapi.io/cart/${id}`)
-		console.log(id)
 		setCartItems((prev) => prev.filter((item) => item.id !== id))
 	}
 
 	const onLikeToCart = async (obj) => {
 		try {
-			if (cartLike.find((favObj) => favObj.id === obj.id)) {
+			if (cartLike.find((favObj) => Number(favObj.id) === Number(obj.id))) {
 				axios.delete(
 					`https://64ecd4d3f9b2b70f2bfb00e2.mockapi.io/like/${obj.id}`
 				)
-				setcartLike((prev) => prev.filter((item) => item.id !== obj.id))
+				setcartLike((prev) =>
+					prev.filter((item) => Number(item.id) !== Number(obj.id))
+				)
 			} else {
 				const { data } = await axios.post(
 					'https://64ecd4d3f9b2b70f2bfb00e2.mockapi.io/like',
@@ -76,48 +93,61 @@ function App() {
 		}
 	}
 
+	const isItemAdded = (id) => {
+		return cartItems.some((obj) => Number(obj.id) === Number(id))
+	}
+
 	return (
-		<div className="wrapper clear">
-			{/* {cartOpened ? <Drawer onClouseBasket={() => setCartOpened(false)} /> : null} */}
-			{cartOpened && (
-				<Drawer
-					items={cartItems}
-					onClouseBasket={() => setCartOpened(false)}
-					onRemuve={onRemuveItem}
-				/>
-			)}
+		<AppContext.Provider
+			value={{
+				items,
+				cartItems,
+				cartLike,
+				isItemAdded,
+				onLikeToCart,
+				setCartOpened,
+        setCartItems
+			}}
+		>
+			<div className="wrapper clear">
+				{cartOpened && (
+					<Drawer
+						items={cartItems}
+						onClouseBasket={() => setCartOpened(false)}
+						onRemuve={onRemuveItem}
+					/>
+				)}
 
-			<Header onClickCard={() => setCartOpened(true)} />
+				<Header onClickCard={() => setCartOpened(true)} />
 
-			<Routes>
-				{/* <Route path="/favorites" element={<div>This is Test</div>} exact /> */}
-				<Route
-					path="/"
-					element={
-						<Home
-							items={items}
-              cartItems={cartItems}
-							searchValue={searchValue}
-							setSearchValue={setSearchValue}
-							onLikeToCart={onLikeToCart}
-							onAddToCart={onAddToCart}
-						/>
-					}
-					exact
-				/>
-			</Routes>
+				<Routes>
+					<Route
+						path=""
+						element={
+							<Home
+								items={items}
+								cartItems={cartItems}
+								searchValue={searchValue}
+								setSearchValue={setSearchValue}
+								onLikeToCart={onLikeToCart}
+								onAddToCart={onAddToCart}
+								isLoading={isLoading}
+							/>
+						}
+						exact
+					/>
+				</Routes>
 
-			<Routes>
-				<Route
-					path="/favorites"
-					element={<Favorites items={cartLike} onLikeToCart={onLikeToCart} />}
-					exact
-				/>
-			</Routes>
-		</div>
+				<Routes>
+					<Route path="/favorites" element={<Favorites />} exact />
+				</Routes>
+			</div>
+		</AppContext.Provider>
 	)
 }
 
 export default App
 
-// #6 1 08 skeleton
+// #6 2 56
+// bag with react Routes path (No routes matched location "/" )
+// bag with see added green squar
