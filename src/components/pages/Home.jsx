@@ -11,6 +11,8 @@ function Home({
 	isLoading,
 }) {
 
+  console.log(items)
+
 	const renderItems = () => {
 		const filtredItems =
 			items &&

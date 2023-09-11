@@ -1,16 +1,20 @@
 import React from 'react'
 import axios from 'axios'
 
-import AppContext from '../context'
-import Info from './info'
+import Info from '../info'
+import { useCard } from '../hooks/useCard'
+
+import styles from './Drawer.module.scss'
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 // kostil with mockAPI
 
-function Drawer({ onClouseBasket, items = [], onRemuve }) {
+function Drawer({ onClouseBasket, items = [], onRemuve, opened }) {
+  const {cartItems, setCartItems, totalPrice} = useCard()
+  // myHooks
+
 	const [isOrderComplited, setIsOrderComplited] = React.useState(false)
 	const [orderId, setOrderId] = React.useState(null)
-	const { cartItems, setCartItems } = React.useContext(AppContext)
 	const [isLoading, setIsLoading] = React.useState(false)
 
 	const onClickOrder = async () => {
@@ -24,7 +28,6 @@ function Drawer({ onClouseBasket, items = [], onRemuve }) {
 			setIsOrderComplited(true)
 			setCartItems([])
 
-      // kostil with mockAPI
       for (let i = 0; i < cartItems.length; i++) {
         const item = cartItems[i]
         await axios.delete(
@@ -39,8 +42,8 @@ function Drawer({ onClouseBasket, items = [], onRemuve }) {
 	}
 
 	return (
-		<div className="overlay">
-			<div className="drawer">
+		<div className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}>
+			<div className={`${styles.drawer}`}>
 				<h2>
 					Корзина
 					<img
@@ -80,12 +83,12 @@ function Drawer({ onClouseBasket, items = [], onRemuve }) {
 								<li>
 									<span>Итого:</span>
 									<div></div>
-									<b>21 498 руб. </b>
+									<b>{totalPrice} руб. </b>
 								</li>
 								<li>
 									<span>Налог 5%:</span>
 									<div></div>
-									<b>1074 руб. </b>
+									<b>{(totalPrice * 0.05).toFixed(2)} руб. </b>
 								</li>
 							</ul>
 							<button
