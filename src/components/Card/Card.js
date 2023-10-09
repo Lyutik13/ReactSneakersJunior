@@ -3,7 +3,57 @@ import ContentLoader from 'react-content-loader'
 
 import AppContext from '../../context'
 
+import btnPlusImg from '../../resources/img/btn/btnPlus.svg'
+import btnChekedImg from '../../resources/img/btn/btnCheked.svg'
+import heardLikeImg from '../../resources/img/btn/heardLike.svg'
+import heardUnlokImg from '../../resources/img/btn/heardUnlok.svg'
+import cardImg1 from '../../resources/img/sneakers/sneakers1.jpg'
+import cardImg2 from '../../resources/img/sneakers/sneakers2.jpg'
+import cardImg3 from '../../resources/img/sneakers/sneakers3.jpg'
+import cardImg4 from '../../resources/img/sneakers/sneakers4.jpg'
+import cardImg5 from '../../resources/img/sneakers/sneakers5.jpg'
+import cardImg6 from '../../resources/img/sneakers/sneakers6.jpg'
+import cardImg7 from '../../resources/img/sneakers/sneakers7.jpg'
+import cardImg8 from '../../resources/img/sneakers/sneakers8.jpg'
+import cardImg9 from '../../resources/img/sneakers/sneakers9.jpg'
+import cardImg10 from '../../resources/img/sneakers/sneakers10.jpg'
+import notFound from '../../resources/img/sneakers/not_found-min.jpg'
 import styles from './Card.module.scss'
+
+/* function imgVisual(url) {
+	if (url === 'img/sneakers/sneakers1.jpg') {
+		return cardImg1
+	} else if (url === 'img/sneakers/sneakers2.jpg') {
+		return cardImg2
+	}
+} */
+
+export function imgVisual(url) {
+	switch (url) {
+		case 'img/sneakers/sneakers1.jpg':
+			return cardImg1
+		case 'img/sneakers/sneakers2.jpg':
+			return cardImg2
+		case 'img/sneakers/sneakers3.jpg':
+			return cardImg3
+		case 'img/sneakers/sneakers4.jpg':
+			return cardImg4
+		case 'img/sneakers/sneakers5.jpg':
+			return cardImg5
+		case 'img/sneakers/sneakers6.jpg':
+			return cardImg6
+		case 'img/sneakers/sneakers7.jpg':
+			return cardImg7
+		case 'img/sneakers/sneakers8.jpg':
+			return cardImg8
+		case 'img/sneakers/sneakers9.jpg':
+			return cardImg9
+		case 'img/sneakers/sneakers10.jpg':
+			return cardImg10
+		default:
+			return notFound
+	}
+}
 
 function Card({
 	id,
@@ -15,7 +65,7 @@ function Card({
 	isFavorites = false,
 	loaging = false,
 }) {
-  const { isItemAdded } = React.useContext(AppContext)
+	const { isItemAdded } = React.useContext(AppContext)
 	const [isLike, setIsLike] = React.useState(isFavorites)
 
 	const onClickPlus = () => {
@@ -48,25 +98,36 @@ function Card({
 			) : (
 				<>
 					<div className={styles.favorite}>
-						{onFavorite && <img
-							onClick={onClickLike}
-							src={isLike ? 'img/btn/heardLike.svg' : 'img/btn/heardUnlok.svg'}
-							alt="Unlok"
-						/>}
+						{onFavorite && (
+							<img
+								onClick={onClickLike}
+								src={isLike ? heardLikeImg : heardUnlokImg}
+								alt="Unlok"
+							/>
+						)}
 					</div>
-					<img width={133} height={112} src={imageUrl} alt="sneakers1" />
+					<div className={styles.wrapperImg}>
+						<img
+							width={133}
+							height={112}
+							src={imgVisual(imageUrl)}
+							alt="sneakers"
+						/>
+					</div>
 					<h5>{name}</h5>
 					<div className={styles.cardFooter}>
 						<div className={styles.cardFooterPrise}>
 							<span>Цена:</span>
 							<b>{price} руб</b>
 						</div>
-						{onPlus && <img
-							className={styles.plus}
-							onClick={onClickPlus}
-							src={isItemAdded(id) ? 'img/btn/btnCheked.svg' : 'img/btn/btnPlus.svg'}
-							alt="plus"
-						/>}
+						{onPlus && (
+							<img
+								className={styles.plus}
+								onClick={onClickPlus}
+								src={isItemAdded(id) ? btnChekedImg : btnPlusImg}
+								alt="plus"
+							/>
+						)}
 					</div>
 				</>
 			)}

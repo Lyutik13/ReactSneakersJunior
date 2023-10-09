@@ -3,7 +3,12 @@ import axios from 'axios'
 
 import Info from '../info'
 import { useCard } from '../hooks/useCard'
+import { imgVisual } from '../Card/Card'
 
+import boxImg from '../../resources/img/box.jpg'
+import compliteOderImg from '../../resources/img/compliteOder.jpg'
+import btnClouseActiveImg from '../../resources/img/btn/btnClouseActive.svg'
+import btnImg from '../../resources/img/btn/btnImg.svg'
 import styles from './Drawer.module.scss'
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -49,7 +54,7 @@ function Drawer({ onClouseBasket, items = [], onRemuve, opened }) {
 					<img
 						onClick={onClouseBasket}
 						className="btnClouse"
-						src="img/btn/btnClouseActive.svg"
+						src={btnClouseActiveImg}
 						alt="btnClouse"
 					/>
 				</h2>
@@ -62,7 +67,7 @@ function Drawer({ onClouseBasket, items = [], onRemuve, opened }) {
 									<img
 										width={70}
 										height={70}
-										src={obj.imageUrl}
+										src={imgVisual(obj.imageUrl)}
 										alt="sneakers2"
 									/>
 									<div>
@@ -72,7 +77,7 @@ function Drawer({ onClouseBasket, items = [], onRemuve, opened }) {
 									<img
 										onClick={() => onRemuve(obj.id)}
 										className="btnClouse"
-										src="img/btn/btnClouseActive.svg"
+										src={btnClouseActiveImg}
 										alt="btnClouse"
 									/>
 								</div>
@@ -97,13 +102,13 @@ function Drawer({ onClouseBasket, items = [], onRemuve, opened }) {
 								className="greenBtn"
 							>
 								Оформить заказ
-								<img src="img/btn/btnImg.svg" alt="basket" />
+								<img src={btnImg} alt="basket" />
 							</button>
 						</div>
 					</div>
 				) : (
 					<Info
-						img={isOrderComplited ? 'img/compliteOder.jpg' : 'img/box.jpg'}
+						img={isOrderComplited ? compliteOderImg : boxImg}
 						title={isOrderComplited ? 'Заказ оформлен!' : 'Корзина пустая'}
 						subTitle={
 							isOrderComplited

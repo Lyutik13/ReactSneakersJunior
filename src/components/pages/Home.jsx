@@ -2,6 +2,8 @@ import React from 'react'
 
 import Card from '../Card/Card'
 
+import searchImg from '../../resources/img/search.svg'
+
 function Home({
 	items,
 	searchValue,
@@ -10,8 +12,6 @@ function Home({
 	onAddToCart,
 	isLoading,
 }) {
-
-  console.log(items)
 
 	const renderItems = () => {
 		const filtredItems =
@@ -42,7 +42,7 @@ function Home({
 						className="imgSearch"
 						width={15}
 						height={15}
-						src="img/search.svg"
+						src={searchImg}
 						alt="search"
 					/>
 					<input

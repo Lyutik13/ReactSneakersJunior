@@ -15,8 +15,22 @@
 	}
 }
 
+.wrapperImg {
+	width: 133px;
+	height: 112px;
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	margin: 0 auto;
+	img {
+		max-height: 100%;
+		max-width: 100%;
+		object-fit: cover;
+	}
+}
+
 .plus {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .cardFooterPrise {
